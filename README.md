@@ -1,31 +1,26 @@
-﻿# Keyguard Gate (ticker)
-> Autonomous Production-Grade Protocol
+# Keyguard Gate — QMOOSA-0785
 
-[![CI/CD Pipeline](https://github.com/elon00/keyguard-gate/actions/workflows/ci-cd-pipeline.yml/badge.svg)](https://github.com/elon00/keyguard-gate/actions)
-[![Score](https://img.shields.io/badge/Reality%20Gates-100%2F100%20GENUINE%20GREEN-2ea44f?style=flat-square)](#reality-check-verification)
-[![NIST PQC](https://img.shields.io/badge/Security-NIST%20FIPS%20203%20%26%20204-blue?style=flat-square)](#security)
-[![Verified](https://img.shields.io/badge/Status-100%25%20Verified-gold?style=flat-square)](#pillars)
+**Status: prototype / security review required. Not production-ready.**
 
----
+This repository is the TESTS component of QMOOSA-1000 Batch 157 (Cryptographic Seed & Key Leakage Auditor). Its existing Python reality battery is corrupted and its smoke harness contains assertions that do not verify live RPC connectivity, NIST FIPS conformance, or cryptographic seed/key leakage prevention.
 
-## About Keyguard Gate
-**Keyguard Gate (\ticker)** is an autonomous, decentralized, post-quantum intelligence protocol engineered for production-grade operational efficiency and cryptographic trust.
+## Local, fail-closed verification
 
----
+```bash
+python -m compileall -q tests
+python -m pip install pytest
+python -m pytest -q tests -o python_files='*.py'
+cargo check --offline
+cargo test --offline
+```
 
-## Running the Protocol Locally
+The Python compilation command is **expected to fail on the existing corrupted test file** until a real implementation-coupled replacement is reviewed. Do not delete, skip, or mock tests to make CI green. Rust compilation or CodeQL success alone is not security approval.
 
-### 1. Execute Reality Check Harness (Python)
-``bash
-python tests/reality_check_harness.py
-``
+## Acceptance blockers
 
-### 2. Run the High-Performance Rust State Engine
-``bash
-cargo run
-``
+1. Replace the malformed `tests/reality_battery.py` with tests calling real key-leak detection and redaction APIs (positive, negative, boundary and adversarial cases). Preserve failing tests until real implementations exist.
+2. Remove placeholder `assert True`, synthetic `status: 200` and arithmetic-only checks from `tests/reality_check_harness.py`; verify real code paths instead.
+3. Validate cross-repository integration with Batch 157 protocol, engine and SDK. Add non-disclosure and deterministic test vectors without exposing actual secrets.
+4. Require independent security review, current-HEAD CI evidence and explicit sign-off before any production or deployment-ready claim.
 
----
-
-## Reality Check Verification
-Keyguard Gate enforces strict pre-deployment verification: all invariants, cryptographic proofs, and micro-escrow contracts must achieve a **100/100 Genuine Green** rating before mainnet settlement.
+No FIPS validation, live QuickNode integration, production readiness, 100/100 score or deployment is asserted. See `audits/SECURITY_CI_REMEDIATION_2026-10-25.md`.
