@@ -36,3 +36,8 @@ No secrets, paid services, public-chain deployment, FIPS certification, or secur
 - `elon00/keyguard/src/main.rs`: prints `QuickNode ... CONNECTED` and `FIPS ... ACTIVE` without a connection or cryptographic verification.
 
 These are implementation/readiness blockers, not evidence that a key-leakage auditor is implemented. Address with isolated, tested review PRs; do not certify on documentation or smoke output alone.
+
+
+## Verified 2026-10-25 Batch 14 crash/restart test result
+
+[Hybrid TLS engine CI run #40162001709](https://github.com/elon00/qmoosa-pqc-hybrid-tls-engine/actions/runs/40162001709) at commit `ffc39df0a9f044b367c13ef588b772174e71cd6c` **FAILED**: 39 executed, 38 passed, 1 failed. The new real-engine two-process regression failed with `P1: restarted/second process accepted the SAME outbound AES-GCM key/IV` (`actual: 0`, `expected: 42`). This is positive evidence of a real cross-process key/nonce reuse protection gap, not a green security gate. Do not merge/deploy the raw record adapter until durable uniqueness is designed, tested and independently reviewed.
