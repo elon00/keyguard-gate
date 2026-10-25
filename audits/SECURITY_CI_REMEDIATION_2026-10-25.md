@@ -27,3 +27,12 @@ Status: **DRAFT / FAIL-CLOSED / NOT SECURITY-APPROVED**.
 5. Do not merge or deploy on the strength of CodeQL success or Rust compilation alone.
 
 No secrets, paid services, public-chain deployment, FIPS certification, or security approval are involved in this change.
+
+
+## Cross-repository implementation blockers (source inspected 2026-10-25)
+
+- `elon00/keyguard-run/src/engine.rs`: the `println!(...S;` line is syntactically invalid Rust, and the exposed engine is a generic atomic bit-state stepper rather than a cryptographic seed/key leakage auditor. Its `load` then `store` transition also is not a single atomic read-modify-write operation.
+- `elon00/keyguard-kit/src/index.ts`: `QMoosaClientConfig` declares `quickNodeQpcUrl` but the constructor reads `config.quickNodeRpcurl`; the TypeScript property mismatch blocks a type-safe build. The SDK shown only creates an encoded X402 header and simulates a bitboard step; it does not demonstrate key-leakage detection.
+- `elon00/keyguard/src/main.rs`: prints `QuickNode ... CONNECTED` and `FIPS ... ACTIVE` without a connection or cryptographic verification.
+
+These are implementation/readiness blockers, not evidence that a key-leakage auditor is implemented. Address with isolated, tested review PRs; do not certify on documentation or smoke output alone.
